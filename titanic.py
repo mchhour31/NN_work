@@ -3,12 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
-from sklearn.impute import SimpleImputer
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics import mean_absolute_error
-from sklearn.compose import ColumnTransformer
-
 # what sorts of people were more likely to survive?
 
 X_full = pd.read_csv('train.csv', index_col='PassengerId')
@@ -32,10 +27,18 @@ X_train = X_train_full[my_cols].copy()
 X_valid = X_valid_full[my_cols].copy()
 X_test = X_test_full[my_cols].copy()
 
-print(X_train.head())
+print(X_test.shape)
+
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
 
 # data preprocessing
-numerical_transformer = SimpleImputer(strategy='mean')
+numerical_transformer = Pipeline(steps=[
+    ('impute', SimpleImputer(strategy='mean')),
+    ('scale', StandardScaler())
+])
 
 categorical_transformer = Pipeline(steps=[
     ('impute', SimpleImputer(strategy='most_frequent')),
@@ -56,11 +59,18 @@ clf = Pipeline(steps=[
 ])
 
 clf.fit(X_train, y_train)
+pred_valid = clf.predict(X_valid)
+pred_test = clf.predict(X_test)
 
-# pred = clf.predict(X_valid)
+print(f"Mean accuracy score: {clf.score(X_valid, y_test)}")
 
-# score = mean_absolute_error(pred, y_test)
-# print(f"MAE: {score}")
+score = mean_absolute_error(pred_valid, y_test)
+print(f"MAE wrt. Validation: {score}")
+
+print(np.concatenate([y_test, pred_test], axis=0))
+# print(pred_test)
 
 
+# output = pd.DataFrame({'PassengerId': X_test.index,
+#                        'Survived':})
 

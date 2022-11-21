@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
+
 # what sorts of people were more likely to survive?
 
-X_full = pd.read_csv('train.csv', index_col='PassengerId')
-X_test_full = pd.read_csv('test.csv', index_col='PassengerId')
+X_full = pd.read_csv('./data/titanic/train.csv', index_col='PassengerId')
+X_test_full = pd.read_csv('./data/titanic/test.csv', index_col='PassengerId')
 
 X = X_full.drop(['Survived'], axis=1)
 y = X_full.Survived

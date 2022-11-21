@@ -6,7 +6,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
 
 # what sorts of people were more likely to survive?
-
 X_full = pd.read_csv('./data/titanic/train.csv', index_col='PassengerId')
 X_test_full = pd.read_csv('./data/titanic/test.csv', index_col='PassengerId')
 
@@ -28,7 +27,7 @@ X_train = X_train_full[my_cols].copy()
 X_valid = X_valid_full[my_cols].copy()
 X_test = X_test_full[my_cols].copy()
 
-print(X_test.shape)
+# print(X_test.shape)
 
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -52,6 +51,8 @@ preprocessor = ColumnTransformer(transformers=[
 ])
 
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_score
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 model = LogisticRegression(random_state=0)
 clf = Pipeline(steps=[
@@ -61,15 +62,28 @@ clf = Pipeline(steps=[
 
 clf.fit(X_train, y_train)
 pred_valid = clf.predict(X_valid)
-pred_test = clf.predict(X_test)
-
-print(f"Mean accuracy score: {clf.score(X_valid, y_test)}")
 
 score = mean_absolute_error(pred_valid, y_test)
 print(f"MAE wrt. Validation: {score}")
 
-print(np.concatenate([y_test, pred_test], axis=0))
-# print(pred_test)
+# confusion matrix
+cm = confusion_matrix(y_test, pred_valid)
+print(cm)
+print(f"Accuracy: {accuracy_score(y_test, pred_valid)}")
+
+from sklearn.metrics import ConfusionMatrixDisplay
+ConfusionMatrixDisplay.from_estimator(clf, X_valid, y_test)
+plt.show()
+
+# k fold validation
+from sklearn.model_selection import cross_val_score
+
+acc = cross_val_score(estimator=clf, X=X_train, y=y_train, cv=10)
+print("Accuracy: {:.2f} %".format(acc.mean()*100))
+print("Standard Deviation: {:.2f} %".format(acc.std()*100))
+
+
+
 
 
 # output = pd.DataFrame({'PassengerId': X_test.index,

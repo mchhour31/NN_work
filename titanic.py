@@ -56,7 +56,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 
 model = LogisticRegression(random_state=0)
 clf = Pipeline(steps=[
-    ('preprocessing', preprocessor),
+    ('preprocessing',   ),
     ('model', model)
 ])
 
@@ -79,13 +79,15 @@ plt.show()
 from sklearn.model_selection import cross_val_score
 
 acc = cross_val_score(estimator=clf, X=X_train, y=y_train, cv=10)
-print("Accuracy: {:.2f} %".format(acc.mean()*100))
 print("Standard Deviation: {:.2f} %".format(acc.std()*100))
 
+# hyper parameter tuning
+from sklearn.model_selection import GridSearchCV
 
+parameters = {'model__penalty': ('l2','none'), 'model__tol': (1e-4, 1e-5), 'model__solver': ('newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga')}
+clf = GridSearchCV(clf, parameters)
+clf.fit(X_train, y_train) 
 
-
-
-# output = pd.DataFrame({'PassengerId': X_test.index,
-#                        'Survived':})
+print(clf.best_params_)
+print(clf.best_score_)
 

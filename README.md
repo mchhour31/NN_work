@@ -1,17 +1,20 @@
-# NN_work
-712 coursework - FE; ANN
+# Machine Learning and Neural Networks
 
-Learning about Neural Networks and Feature Engineering
+Learning about ML, Neural Networks and Feature Engineering
 
-Feature Engineering:
-- Supervised and Unsupervised ML
-- Cross-validation
-- Classification
-- Time Series Classification
+- Supervised | Unsupervised | Reinforcement Learning
+- Classification | Regression
+- K Fold Validation
 
-Neural Network:
-- Working with Jupyter Notebooks
-- SLP (Single Layer Perceptrons), MLP (Multi Layer Perceptrons) 
-- Self Organised Maps (SOM)
-- Radial Basis Functions (RBFNN)
-- Tensorflow and Keras
+Preprocessing
+- Imputation
+- One Hot Encoding | Label Encoding
+- Feature Scaling - Normalising | Standardising
+
+Classification
+- Basic MNist Image Classification using ANN w. Keras and Tensorflow.
+- NLP Classification
+
+Dimensionality Reduction 
+- PCA
+
